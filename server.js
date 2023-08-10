@@ -15,9 +15,3 @@ app.listen(process.env.PORT || 3000, () => {
 });
 
 
-
-//auth middleware
-//req and res objects 
-//routing separate -done
-//validation -done
-
