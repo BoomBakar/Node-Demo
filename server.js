@@ -1,15 +1,8 @@
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv').config();
-const Joi = require('joi');
-
-
-const movies = [
-    { id: 1, title: 'The Shawshank Redemption', year: 1994 },
-    { id: 2, title: 'The Godfather', year: 1972 },
-    { id: 3, title: 'The Godfather: Part II', year: 1974 },
-    { id: 4, title: 'The Dark Knight', year: 2008 }
-]
+const validateMovie = require('./validator/validateMovie');
+const movies = require('./models/movies');
 
 app.use(express.json());
 
@@ -18,6 +11,7 @@ app.get('/', (req, res) => {
 });
 //Get request for all movies
 app.get('/api/movies', (req, res) => {
+    console.log(res);
     res.send(movies);
 });
 //Get request for a specific movie
@@ -61,16 +55,9 @@ app.listen(process.env.PORT || 3000, () => {
     console.log(`Server started on port http://localhost:${process.env.PORT || 3000}`);
 });
 
-function validateMovie(movie) {
-    const schema = Joi.object( {
-        title: Joi.string().min(3).required(),
-        year: Joi.number().min(1900).required()
-    });
 
-    return schema.validate(movie);
-}
 
 //auth middleware
 //routing separate
-//validation
-//req and res objects
+//req and res objects 
+//validation -done
