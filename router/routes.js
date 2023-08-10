@@ -10,14 +10,14 @@ router.get('/', (req, res) => {
 });
 //Get request for all movies
 router.get('/movies', (req, res) => {
-    console.log(res);
+    //console.log(res);
     res.send(movies);
 });
 //Get request for a specific movie
 router.get('/movies/:id', (req, res) => {
     const movie = movies.find(m => m.id === parseInt(req.params.id));
     if (!movie) return res.status(404).send('The movie with the given ID was not found.');
-    res.send(movie);
+    res.status(200).send(movie);
 });
 //Post request to add a movie
 router.post('/movies', (req, res) => {
@@ -29,7 +29,7 @@ router.post('/movies', (req, res) => {
         year: req.body.year
     };
     movies.push(movie);
-    res.send(movie);
+    res.status(200).send(movie);
 });
 //Put request to update a movie
 router.put('/movies/:id', (req, res) => {
@@ -39,7 +39,7 @@ router.put('/movies/:id', (req, res) => {
     if (error) return res.status(400).send(error.details[0].message);
     movie.title = req.body.title;
     movie.year = req.body.year;
-    res.send(movie);
+    res.status(200).send(movie);
 });
 //Delete request to delete a movie
 router.delete('/movies/:id', (req, res) => {
@@ -47,7 +47,7 @@ router.delete('/movies/:id', (req, res) => {
     if (!movie) return res.status(404).send('The movie with the given ID was not found.');
     const index = movies.indexOf(movie);
     movies.splice(index, 1);
-    res.send(movie);
+    res.status(200).send(movie);
 });
 
 

@@ -6,6 +6,10 @@ const auth = require('./middlewares/auth');
 
 app.use(express.json());
 
+// app.use((req,res,next) =>{
+//     console.log(req.query);
+//     next();
+// })
 app.use(auth);
 
 app.use('/api', routes);
