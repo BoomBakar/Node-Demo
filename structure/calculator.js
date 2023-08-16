@@ -1,3 +1,3 @@
-const {sub} = require('./structu');
+const struc = require('./structu');
 
-console.log(sub());
+console.log(struc.sub());

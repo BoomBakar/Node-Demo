@@ -4,11 +4,21 @@ const dotenv = require('dotenv').config();
 
 
 const auth = (req, res, next) => {
-    const token = req.query.token;  //get token from query
-    //check if the a token is provided and it its the right one
-    if (!token) return res.status(401).send('Access denied. No token provided.');
-    if (token !== process.env.TOKEN) return res.status(401).send('Access denied. Invalid token.');
-    next();
+    //implement basic authorization
+
+
+    const token = req.headers.authorization.split(' ')[1];
+    
+    const decoded = Buffer.from(token, 'base64').toString('ascii');
+    const [username, password] = decoded.split(':');
+    
+    if (username === process.env.UNAME && password === process.env.PASSWORD) {
+        next();
+    } else {
+        res.status(401).send('Authentication required!');
+    }
+
+        
 };
 
 
