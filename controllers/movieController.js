@@ -2,15 +2,15 @@ const movies = require('../models/movies');
 const validateMovie = require('../validator/validateMovie');
 
 const movieController = {
-    getAllMovies: (req, res) => {
+    getAll: (req, res) => {
         res.send(movies);
     },
-    getMovieById: (req, res) => {
+    getById: (req, res) => {
         const movie = movies.find(m => m.id === parseInt(req.params.id));
         if (!movie) return res.status(404).send('The movie with the given ID was not found.');
         res.status(200).send(movie);
     },
-    addMovie: (req, res) => {
+    add: (req, res) => {
         const { error } = validateMovie(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     const movie = {
@@ -21,7 +21,7 @@ const movieController = {
     movies.push(movie);
     res.status(200).send(movie);
     },
-    updateMovie: (req, res) => {
+    update: (req, res) => {
         const movie = movies.find(m => m.id === parseInt(req.params.id));
     if (!movie) return res.status(404).send('The movie with the given ID was not found.');
     const { error } = validateMovie(req.body);
@@ -30,7 +30,7 @@ const movieController = {
     movie.year = req.body.year;
     res.status(200).send(movie);
     },
-    deleteMovie: (req, res) => {
+    delete: (req, res) => {
         const movie = movies.find(m => m.id === parseInt(req.params.id));
     if (!movie) return res.status(404).send('The movie with the given ID was not found.');
     const index = movies.indexOf(movie);
