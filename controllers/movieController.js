@@ -1,41 +1,70 @@
-const movies = require('../models/movies');
+const Movie = require('../models/movies');
+const Director = require('../models/directors');    
 const validateMovie = require('../validator/validateMovie');
+const validateDirector = require('../validator/validateDirector');
 
 const movieController = {
-    getAll: (req, res) => {
-        res.send(movies);
+    getAll: async (req, res) => {
+        
+        try{
+            const movies = await Movie.find();
+            res.status(200).send(movies);
+        }
+        catch(err){
+            console.log(err);
+        }
+        
     },
-    getById: (req, res) => {
-        const movie = movies.find(m => m.id === parseInt(req.params.id));
-        if (!movie) return res.status(404).send('The movie with the given ID was not found.');
-        res.status(200).send(movie);
+    getById: async (req, res) => {
+        error = req.params.id.length < 24;
+        if (error) return res.status(400).send('Invalid ID.');
+        try{
+            const movie = await Movie.findById(req.params.id);
+            if (!movie) return res.status(404).send('The movie with the given ID was not found.');
+            res.status(200).send(movie);
+
+        }
+        catch(err){
+            console.log(err);
+        } 
     },
-    add: (req, res) => {
+    add: async (req, res) => {
+        
         const { error } = validateMovie(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-    const movie = {
-        id: movies.length + 1,
-        title: req.body.title,
-        year: req.body.year
-    };
-    movies.push(movie);
-    res.status(200).send(movie);
+        if (error) return res.status(400).send(error.details[0].message);
+        try{
+            const {title, yearReleased, director} = req.body;
+            const newMovie = new Movie({
+                title,
+                yearReleased,
+                director
+            });
+            const movie = await newMovie.save();
+            res.status(200).send(movie);
+        }catch(err){
+            console.log(err);
+        }
     },
-    update: (req, res) => {
-        const movie = movies.find(m => m.id === parseInt(req.params.id));
-    if (!movie) return res.status(404).send('The movie with the given ID was not found.');
-    const { error } = validateMovie(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-    movie.title = req.body.title;
-    movie.year = req.body.year;
-    res.status(200).send(movie);
+    update: async (req, res) => {
+        error = req.params.id.length < 24;
+        if (error) return res.status(400).send('Invalid ID.');
+        const { error } = validateMovie(req.body);
+        if (error) return res.status(400).send(error.details[0].message);
+        try{   
+
+        }
+        catch(err){
+            console.log(err);
+        }
     },
     delete: (req, res) => {
+        error = req.params.id.length < 24;
+        if (error) return res.status(400).send('Invalid ID.');
         const movie = movies.find(m => m.id === parseInt(req.params.id));
-    if (!movie) return res.status(404).send('The movie with the given ID was not found.');
-    const index = movies.indexOf(movie);
-    movies.splice(index, 1);
-    res.status(200).send(movie);
+        if (!movie) return res.status(404).send('The movie with the given ID was not found.');
+        const index = movies.indexOf(movie);
+        movies.splice(index, 1);
+        res.status(200).send(movie);
     }
 };
 
