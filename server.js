@@ -10,7 +10,7 @@ app.use(express.json());
 
 dbConnect();
 
-app.use(auth);
+//app.use(auth);
 
 app.use('/api', movieRouter);
 

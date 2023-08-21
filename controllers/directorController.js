@@ -31,8 +31,9 @@ const directorController = {
         if (error) return res.status(400).send(error.details[0].message);
         try{
             const {name, age, photoPath} = req.body;
-            const buffer = Buffer.from(photoPath.replace(/^data:image\/(png|jpg|jpeg):base64,/,''), 'base64');
+            const buffer = Buffer.from(photoPath.replace(/^data:image\/(png|jpg|jpeg);base64,/,''), 'base64');
             const imgPath = `${Date.now()}-${name}.jpg`;
+           
             try{
                 fs.writeFileSync(`public/${imgPath}`, buffer);
             }
