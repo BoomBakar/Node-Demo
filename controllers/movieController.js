@@ -1,7 +1,5 @@
 const Movie = require('../models/movies');
-const Director = require('../models/directors');    
 const validateMovie = require('../validator/validateMovie');
-const validateDirector = require('../validator/validateDirector');
 
 const movieController = {
     getAll: async (req, res) => {
@@ -19,7 +17,7 @@ const movieController = {
         error = req.params.id.length < 24;
         if (error) return res.status(400).send('Invalid ID.');
         try{
-            const movie = await Movie.findById(req.params.id);
+            const movie = await Movie.findById(req.params.id).populate('director');
             if (!movie) return res.status(404).send('The movie with the given ID was not found.');
             res.status(200).send(movie);
 

@@ -12,7 +12,7 @@ const movieSchema = new Schema({
         required: true
     },
     director: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectID,
         ref: 'Director',
         required: true
     },
