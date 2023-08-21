@@ -1,5 +1,7 @@
 const Director = require('../models/directors');
 const validateDirector = require('../validator/validateDirector');
+const fs = require('fs');
+require('dotenv').config();
 
 const directorController = {
     getAll: async (req, res) => {
@@ -28,10 +30,20 @@ const directorController = {
         const { error } = validateDirector(req.body);
         if (error) return res.status(400).send(error.details[0].message);
         try{
-            const {name, age} = req.body;
+            const {name, age, photoPath} = req.body;
+            const buffer = Buffer.from(photoPath.replace(/^data:image\/(png|jpg|jpeg):base64,/,''), 'base64');
+            const imgPath = `${Date.now()}-${name}.jpg`;
+            try{
+                fs.writeFileSync(`public/${imgPath}`, buffer);
+            }
+            catch(err){
+                console.log(err);
+            }
+
             const newDirector = new Director({
                 name,
-                age
+                age,
+                photoPath : `http://localhost:${process.env.PORT}/public/${imgPath}`
             });
             const director = await newDirector.save();
             res.status(200).send(director);
@@ -43,8 +55,7 @@ const directorController = {
     update: async (req, res) => {
         error = req.params.id.length < 24;
         if (error) return res.status(400).send('Invalid ID.');
-        const { error } = validateDirector(req.body);
-        if (error) return res.status(400).send(error.details[0].message);
+
         try{
             const {name, age} = req.body;
             const director = await Director.findByIdAndUpdate(req.params.id, {

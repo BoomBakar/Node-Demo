@@ -8,6 +8,7 @@ const directorSchema = new Schema({
         unique: true
     },
     age: Number,
+    photoPath: String
 
 }, {
     timestamps: true
